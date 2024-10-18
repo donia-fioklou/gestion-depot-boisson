@@ -1,0 +1,45 @@
+
+image: python:3.12
+
+stages:
+  - test
+  - deploy
+
+variables:
+  DATABASE_URL: "postgresql://bkbboisson_user:No4MfQ3FrS9fCRaXxqZzz73EgV8ocy8a@dpg-cq2s2qiju9rs73937ad0-a.oregon-postgres.render.com/bkbboisson"
+  RENDER_API_KEY: $RENDER_API_KEY
+  RENDER_SERVICE_ID: "cq394ebqf0us73dcufp0"
+
+cache:
+  paths:
+    - .cache/pip
+    - venv/
+
+before_script:
+  - python -m venv venv
+  - source venv/bin/activate
+  - cd src  # Change directory to src
+  - pip install -r requirements.txt
+
+test:
+  stage: test
+  script:
+    - python manage.py makemigrations
+    - python manage.py migrate 
+    - python manage.py test gest_stock_app.tests
+
+deploy:
+  stage: deploy
+  script:
+    - echo "Deploying to Render"
+    - curl -s "https://api.render.com/deploy/srv-${RENDER_SERVICE_ID}?key=${RENDER_API_KEY}"
+  environment:
+      name: production
+      url: https://dashboard.render.com/web/srv-${RENDER_SERVICE_ID}
+  only:
+    - main
+
+#https://api.render.com/deploy/srv-cq394ebqf0us73dcufp0?key=a2UyeV2PKM0
+# >
+#     curl -X POST "https://api.render.com/deploy/srv-${RENDER_SERVICE_ID}"
+#      -H "Authorization: Bearer ${RENDER_API_KEY}"

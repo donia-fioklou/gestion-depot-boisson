@@ -1,0 +1,36 @@
+venv/
+.pdf
+
+# Fichiers et répertoires de cache Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Cache de Django (par défaut dans certains environnements)
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+
+# Cache de Django (si vous utilisez une configuration de cache locale)
+cache/
+staticfiles/
+media/
+tmp/
+
+# Répertoires de cache de l'environnement de développement
+*.sqlite3
+*.DS_Store
+
+# Virtualenv
+venv/
+env/
+ENV/
+
+# Fichiers générés automatiquement
+*.coverage
+*.egg-info/
+dist/
+build/
